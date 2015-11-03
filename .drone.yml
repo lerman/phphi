@@ -5,10 +5,18 @@ script:
   - echo "build commands"
   - echo "no build command"
   - echo noop
+clone:
+  path: github.com/lerman/phphi
+build:
+  image: bradrydzewski/php:5.5
+  commands:
+    - echo "build commands"
+    - echo "no build command"
+    - echo noop
 publish:
   docker:
     dockerfile: ./Dockerfile
-    docker_host: 173.39.241.255:2375
+    docker_host: 10.10.10.15:2375
     docker_version: 1.4.1
     registry_login_url: $$bintray_repo_login_url
     registry_login: true
@@ -17,10 +25,14 @@ publish:
     email: $$bintray_user_email
     image_name: $$bintray_image_name
     push_latest: true
-    tag: $DRONE_COMMIT
+    tag: $$COMMIT
+
+    registry: $$bintray_registry
+    repo: $$bintray_repo
 notify:
   webhook:
+    image: shippedrepos-docker-drone.bintray.io/drone-webhook
     urls:
-      - "http://shipped-api.shipped-cisco.com/webhooks/drone"
+      - "http://shipped-api.tx3.shipped-cisco.com/webhooks/drone"
     on_success: true
     on_failure: true
